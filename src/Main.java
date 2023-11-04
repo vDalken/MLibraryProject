@@ -43,7 +43,7 @@ public class Main {
                         String input;
                         System.out.println("\u001b[32;1m>Welcome admin \u001b[0m");
                         do {
-                            System.out.println("0- Log out\n1- Add Books\n2- Remove Books\n3- See Books");
+                            System.out.println("0- Log out\n1- Add Books\n2- Remove Books\n3- See Books\n4- See Requested Books");
                             input = scanner.next();
                             switch (input) {
                                 case "0":
@@ -93,6 +93,9 @@ public class Main {
                                 case "3":
                                     library.showBooks();
                                     break;
+                                case "4":
+                                    library.showRequestedBooks();
+                                    break;
                                 default:
                                     System.out.println("\u001b[31;1mOption not available\u001b[0m");
                                     break;
@@ -126,7 +129,7 @@ public class Main {
                     break;
                 case "4":
                     if (isLoggedIn) {
-                        library.showRequestedBooks();
+                        library.showRequestedBooksOfLoggedUser();
                     } else {
                         System.out.println("\u001b[31;1m>You have to log in! \u001b[0m");
                     }

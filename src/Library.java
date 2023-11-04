@@ -77,15 +77,15 @@ class Library {
                 if (requestedBooks.isEmpty()) {
                     availableBooks.get(i).setNumberOfCopies(availableBooks.get(i).getNumberOfCopies() - 1);
                     Book book = new Book(availableBooks.get(i).getName(), availableBooks.get(i).getNumberOfPages(), availableBooks.get(i).getNumberOfCopies());
+                    if (availableBooks.get(i).getNumberOfCopies() == 0) {
+                        availableBooks.remove(availableBooks.get(i));
+                    }
                     requestedBooks.add(book);
                     for (int i1 = 0; i1 < requestedBooks.size(); i1++) {
                         if (requestedBooks.get(i1).getName().equals(bookName)) {
-                            System.out.println(availableBooks.get(i).getNumberOfCopies());
                             requestedBooks.get(i1).setNumberOfCopies(1);
                             Book newBook = new Book(requestedBooks.get(i1).getName(), requestedBooks.get(i1).getNumberOfPages(), requestedBooks.get(i1).getNumberOfCopies());
                             loggedUser.setRequestedBooks(newBook);
-                            System.out.println(availableBooks.get(i).getNumberOfCopies());
-                            System.out.println(requestedBooks.get(i1).getNumberOfCopies());
                         }
                     }
                 } else {
@@ -93,20 +93,32 @@ class Library {
                     if (availableBooks.get(i).getNumberOfCopies() == 0) {
                         availableBooks.remove(availableBooks.get(i));
                     }
+
+                    System.out.println(requestedBooks.toString());
                     for (int i1 = 0; i1 < requestedBooks.size(); i1++) {
                         if (requestedBooks.get(i1).getName().equals(bookName)) {
                             System.out.println(requestedBooks.get(i1).getNumberOfCopies());
                             requestedBooks.get(i1).setNumberOfCopies(requestedBooks.get(i1).getNumberOfCopies() + 1);
                             System.out.println(requestedBooks.get(i1).getNumberOfCopies());
-                            for (int i2 = 0; i2 < loggedUser.getRequestedBooksSize(); i2++) {
-                                if (loggedUser.getRequestedBooks().get(i2).getName().equals(bookName)) {
-                                    loggedUser.getRequestedBooks().get(i2).setNumberOfCopies(loggedUser.getRequestedBooks().get(i2).getNumberOfCopies() + 1);
+                            if (loggedUser.getRequestedBooksSize() == 0) {
+                                Book newBook2 = new Book(bookName, requestedBooks.get(i1).getNumberOfPages(), 1);
+                                loggedUser.setRequestedBooks(newBook2);
+                            } else {
+                                for (int i2 = 0; i2 < loggedUser.getRequestedBooksSize(); i2++) {
+                                    if (loggedUser.getRequestedBooks().get(i2).getName().equals(bookName)) {
+                                        loggedUser.getRequestedBooks().get(i2).setNumberOfCopies(loggedUser.getRequestedBooks().get(i2).getNumberOfCopies() + 1);
+                                    } else {
+                                        Book newBook3 = new Book(bookName, requestedBooks.get(i1).getNumberOfPages(), 1);
+                                        loggedUser.setRequestedBooks(newBook3);
+                                    }
                                 }
                             }
                             //loggedUser.setRequestedBooks(requestedBooks.get(i1));
                         } else {
+                            System.out.println("ok");
                             Book newBook1 = new Book(bookName, requestedBooks.get(i1).getNumberOfPages(), 1);
                             loggedUser.setRequestedBooks(newBook1);
+                            requestedBooks.add(newBook1);
                         }
                     }
                 }
@@ -114,36 +126,40 @@ class Library {
         }
     }
 
-    public void showRequestedBooks() {
-        for (int i = 0; i < users.size(); i++) {
-            if (loggedUser.toString().equals(users.get(i).toString())) {
-                System.out.println("Requested Books of " + users.get(i).getName() + ":");
-                System.out.println(users.get(i).getRequestedBooks());
+        public void showRequestedBooksOfLoggedUser () {
+            for (int i = 0; i < users.size(); i++) {
+                if (loggedUser.toString().equals(users.get(i).toString())) {
+                    System.out.println("Requested Books of " + users.get(i).getName() + ":");
+                    System.out.println(users.get(i).getRequestedBooks());
+                }
             }
         }
-    }
 
-    public boolean isThereEmail(String email) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(email)) {
-                return true;
-            } else {
-                return false;
-            }
+        public void showRequestedBooks () {
+            for (int i = 0; i < requestedBooks.size(); i++) System.out.println(requestedBooks.get(i));
         }
-        return false;
-    }
 
-    public boolean isThereThatBook(String name, int numberOfPages) {
-        for (int i = 0; i < availableBooks.size(); i++) {
-            if (availableBooks.get(i).getName().equals(name) && availableBooks.get(i).getNumberOfPages() == numberOfPages) {
-                return true;
+        public boolean isThereEmail (String email){
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getEmail().equals(email)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
+            return false;
         }
-        return false;
-    }
 
-    public void logOutUser() {
-        loggedUser = null;
+        public boolean isThereThatBook (String name,int numberOfPages){
+            for (int i = 0; i < availableBooks.size(); i++) {
+                if (availableBooks.get(i).getName().equals(name) && availableBooks.get(i).getNumberOfPages() == numberOfPages) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void logOutUser () {
+            loggedUser = null;
+        }
     }
-}
