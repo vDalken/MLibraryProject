@@ -74,29 +74,42 @@ class Library {
     public void requestBook(String bookName) {
         for (int i = 0; i < availableBooks.size(); i++) {
             if (availableBooks.get(i).getName().equals(bookName)) {
-                if (availableBooks.get(i).getNumberOfCopies() == 0) {
-                    availableBooks.remove(availableBooks.get(i));
-                }
                 if (requestedBooks.isEmpty()) {
                     availableBooks.get(i).setNumberOfCopies(availableBooks.get(i).getNumberOfCopies() - 1);
-                    requestedBooks.add(availableBooks.get(i));
+                    Book book = new Book(availableBooks.get(i).getName(), availableBooks.get(i).getNumberOfPages(), availableBooks.get(i).getNumberOfCopies());
+                    requestedBooks.add(book);
                     for (int i1 = 0; i1 < requestedBooks.size(); i1++) {
                         if (requestedBooks.get(i1).getName().equals(bookName)) {
                             System.out.println(availableBooks.get(i).getNumberOfCopies());
                             requestedBooks.get(i1).setNumberOfCopies(1);
+                            Book newBook = new Book(requestedBooks.get(i1).getName(), requestedBooks.get(i1).getNumberOfPages(), requestedBooks.get(i1).getNumberOfCopies());
+                            loggedUser.setRequestedBooks(newBook);
                             System.out.println(availableBooks.get(i).getNumberOfCopies());
+                            System.out.println(requestedBooks.get(i1).getNumberOfCopies());
                         }
                     }
                 } else {
+                    availableBooks.get(i).setNumberOfCopies(availableBooks.get(i).getNumberOfCopies() - 1);
+                    if (availableBooks.get(i).getNumberOfCopies() == 0) {
+                        availableBooks.remove(availableBooks.get(i));
+                    }
                     for (int i1 = 0; i1 < requestedBooks.size(); i1++) {
                         if (requestedBooks.get(i1).getName().equals(bookName)) {
+                            System.out.println(requestedBooks.get(i1).getNumberOfCopies());
                             requestedBooks.get(i1).setNumberOfCopies(requestedBooks.get(i1).getNumberOfCopies() + 1);
+                            System.out.println(requestedBooks.get(i1).getNumberOfCopies());
+                            for (int i2 = 0; i2 < loggedUser.getRequestedBooksSize(); i2++) {
+                                if (loggedUser.getRequestedBooks().get(i2).getName().equals(bookName)) {
+                                    loggedUser.getRequestedBooks().get(i2).setNumberOfCopies(loggedUser.getRequestedBooks().get(i2).getNumberOfCopies() + 1);
+                                }
+                            }
+                            //loggedUser.setRequestedBooks(requestedBooks.get(i1));
                         } else {
-
+                            Book newBook1 = new Book(bookName, requestedBooks.get(i1).getNumberOfPages(), 1);
+                            loggedUser.setRequestedBooks(newBook1);
                         }
                     }
                 }
-                //put if to check if there's more than 1 copy, if there is, take 1 copy, if not, take the whole book
             }
         }
     }

@@ -35,4 +35,8 @@ class User {
     public void setRequestedBooks(Book requestedBook) {
         requestedBooks.add(requestedBook);
     }
+
+    public int getRequestedBooksSize(){
+        return requestedBooks.size();
+    }
 }
