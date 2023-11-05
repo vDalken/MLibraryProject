@@ -32,77 +32,81 @@ public class Main {
                     }
                     break;
                 case "2":
-                    System.out.println("Email:");
-                    String loginEmail = scanner.next();
-                    System.out.println("Password:");
-                    String loginPassword = scanner.next();
-                    isLoggedIn = library.isAccount(loginEmail, loginPassword);
-                    if (isLoggedIn && !library.isAdmin()) {
-                        System.out.println("\u001b[32;1m>You're logged in! \u001b[0m");
-                    } else if (library.isAdmin()) {
-                        String input;
-                        System.out.println("\u001b[32;1m>Welcome admin \u001b[0m");
-                        do {
-                            System.out.println("0- Log out\n1- Add Books\n2- Remove Books\n3- See Books\n4- See Requested Books");
-                            input = scanner.next();
-                            switch (input) {
-                                case "0":
-                                    System.out.println("\u001b[33;1m>Bye bye admin \u001b[0m");
-                                    isLoggedIn = false;
-                                    break;
-                                case "1":
-                                    library.showBooks();
-                                    System.out.println("Give me the name of the book");
-                                    scanner.nextLine();
-                                    String name = scanner.nextLine();
-                                    System.out.println("Give me the number of pages");
-                                    int numberOfPages = scanner.nextInt();
-                                    System.out.println("Give me the number of copies");
-                                    int numberOfCopies = scanner.nextInt();
-                                    Book book = new Book(name.trim(), numberOfPages, numberOfCopies);
-                                    library.addBook(book);
-                                    System.out.println("\u001b[32;1m>Books added! \u001b[0m");
-                                    break;
-                                case "2":
-                                    String removedBookName = "";
-                                    int numberOfPagesOfRemovedBook = 0;
-                                    boolean isThereThatBook = false;
-
-                                    do {
+                    if (!isLoggedIn) {
+                        System.out.println("Email:");
+                        String loginEmail = scanner.next();
+                        System.out.println("Password:");
+                        String loginPassword = scanner.next();
+                        isLoggedIn = library.isAccount(loginEmail, loginPassword);
+                        if (isLoggedIn && !library.isAdmin()) {
+                            System.out.println("\u001b[32;1m>You're logged in! \u001b[0m");
+                        } else if (library.isAdmin()) {
+                            String input;
+                            System.out.println("\u001b[32;1m>Welcome admin \u001b[0m");
+                            do {
+                                System.out.println("0- Log out\n1- Add Books\n2- Remove Books\n3- See Books\n4- See Requested Books");
+                                input = scanner.next();
+                                switch (input) {
+                                    case "0":
+                                        System.out.println("\u001b[33;1m>Bye bye admin \u001b[0m");
+                                        isLoggedIn = false;
+                                        break;
+                                    case "1":
                                         library.showBooks();
-                                        System.out.println("\u001b[31;1m>Type 0 to leave if you want to leave this section\u001b[0m\nGive me the name of the book you want to remove");
+                                        System.out.println("Give me the name of the book");
                                         scanner.nextLine();
-                                        removedBookName = scanner.nextLine();
-                                        if (!removedBookName.equals("0")) {
-                                            System.out.println("Give me the number of pages");
-                                            numberOfPagesOfRemovedBook = scanner.nextInt();
-                                            isThereThatBook = library.isThereThatBook(removedBookName.trim(), numberOfPagesOfRemovedBook);
-                                            if (!isThereThatBook && numberOfPagesOfRemovedBook != 0) {
-                                                System.out.println("\u001b[31;1m>There is no such book in our inventory! Try again \u001b[0m");
-                                            } else if (isThereThatBook) {
-                                                library.removeBook(removedBookName, numberOfPagesOfRemovedBook);
-                                                System.out.println("\u001b[32;1m>All of the copies of the book were removed! \u001b[0m");
+                                        String name = scanner.nextLine();
+                                        System.out.println("Give me the number of pages");
+                                        int numberOfPages = scanner.nextInt();
+                                        System.out.println("Give me the number of copies");
+                                        int numberOfCopies = scanner.nextInt();
+                                        Book book = new Book(name.trim(), numberOfPages, numberOfCopies);
+                                        library.addBook(book);
+                                        System.out.println("\u001b[32;1m>Books added! \u001b[0m");
+                                        break;
+                                    case "2":
+                                        String removedBookName = "";
+                                        int numberOfPagesOfRemovedBook = 0;
+                                        boolean isThereThatBook = false;
+
+                                        do {
+                                            library.showBooks();
+                                            System.out.println("\u001b[31;1m>Type 0 to leave if you want to leave this section\u001b[0m\nGive me the name of the book you want to remove");
+                                            scanner.nextLine();
+                                            removedBookName = scanner.nextLine();
+                                            if (!removedBookName.equals("0")) {
+                                                System.out.println("Give me the number of pages");
+                                                numberOfPagesOfRemovedBook = scanner.nextInt();
+                                                isThereThatBook = library.isThereThatBook(removedBookName.trim(), numberOfPagesOfRemovedBook);
+                                                if (!isThereThatBook && numberOfPagesOfRemovedBook != 0) {
+                                                    System.out.println("\u001b[31;1m>There is no such book in our inventory! Try again \u001b[0m");
+                                                } else if (isThereThatBook) {
+                                                    library.removeBook(removedBookName, numberOfPagesOfRemovedBook);
+                                                    System.out.println("\u001b[32;1m>All of the copies of the book were removed! \u001b[0m");
+                                                } else {
+                                                    System.out.println("\u001b[31;1m>You left this section! \u001b[0m");
+                                                }
                                             } else {
                                                 System.out.println("\u001b[31;1m>You left this section! \u001b[0m");
                                             }
-                                        } else {
-                                            System.out.println("\u001b[31;1m>You left this section! \u001b[0m");
-                                        }
-                                    } while (!isThereThatBook && !removedBookName.equals("0") && numberOfPagesOfRemovedBook != 0);
-                                    break;
-                                case "3":
-                                    library.showBooks();
-                                    break;
-                                case "4":
-                                    library.showRequestedBooks();
-                                    break;
-                                default:
-                                    System.out.println("\u001b[31;1mOption not available\u001b[0m");
-                                    break;
-                            }
-                        } while (!input.equals("0"));
-                    } else {
-                        System.out.println("\u001b[31;1m>Account not found! \u001b[0m");
+                                        } while (!isThereThatBook && !removedBookName.equals("0") && numberOfPagesOfRemovedBook != 0);
+                                        break;
+                                    case "3":
+                                        library.showBooks();
+                                        break;
+                                    case "4":
+                                        library.showRequestedBooks();
+                                        break;
+                                    default:
+                                        System.out.println("\u001b[31;1mOption not available\u001b[0m");
+                                        break;
+                                }
+                            } while (!input.equals("0"));
+                        } else {
+                            System.out.println("\u001b[31;1m>Account not found! \u001b[0m");
+                        }
+                    }else{
+                        System.out.println("\u001b[31;1m>You're already logged in\u001b[0m");
                     }
                     break;
                 case "3":

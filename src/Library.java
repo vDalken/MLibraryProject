@@ -165,8 +165,6 @@ class Library {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getEmail().equals(email)) {
                 return true;
-            } else {
-                return false;
             }
         }
         return false;
