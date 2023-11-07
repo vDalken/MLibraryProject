@@ -90,13 +90,8 @@ class Library {
                     availableBooks.remove(availableBooks.get(bookIndex));
                 }
                 requestedBooks.add(book);
-                for (int i1 = 0; i1 < requestedBooks.size(); i1++) {
-                    if (requestedBooks.get(i1).getName().equals(bookName)) {
-                        requestedBooks.get(i1).setNumberOfCopies(1);
-                        Book newBook = new Book(bookName, numberOfPages, 1);
-                        loggedUser.setRequestedBooks(newBook);
-                    }
-                }
+                Book newBook = new Book(bookName, numberOfPages, 1);
+                loggedUser.setRequestedBooks(newBook);
             } else {
                 availableBooks.get(bookIndex).setNumberOfCopies(availableBooks.get(bookIndex).getNumberOfCopies() - 1);
 
@@ -148,8 +143,9 @@ class Library {
                 } else {
                     System.out.println("ok");
                     Book newBook1 = new Book(bookName, requestedBooks.get(index).getNumberOfPages(), 1);
+                    Book newBook2 = new Book(bookName, requestedBooks.get(index).getNumberOfPages(), 1);
                     loggedUser.setRequestedBooks(newBook1);
-                    requestedBooks.add(newBook1);
+                    requestedBooks.add(newBook2);
                 }
             }
         } else {
